@@ -1,0 +1,1627 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Shiksha Sahay | Empowering Student Futures</title>
+<meta name="description" content="Shiksha Sahay is a free student resource hub for study, practice, scholarships, interviews, programming and communication.">
+
+<!-- Supabase JavaScript client -->
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+
+<style>
+:root{
+  --bg:#07151a;--panel:#0d2229;--panel2:#102b33;--text:#eef8f6;--muted:#9eb5b9;
+  --brand:#39d3aa;--brand2:#7d8cff;--gold:#ffd166;--danger:#ff6b7a;
+  --line:rgba(255,255,255,.09);--shadow:0 20px 60px rgba(0,0,0,.28)
+}
+*{box-sizing:border-box;margin:0;padding:0}
+html{scroll-behavior:smooth}
+body{
+  font-family:Inter,system-ui,Segoe UI,Arial,sans-serif;background:
+  radial-gradient(circle at 15% 0%,#12363b 0,transparent 32%),
+  radial-gradient(circle at 90% 10%,#202252 0,transparent 28%),var(--bg);
+  color:var(--text);overflow-x:hidden
+}
+body.light{--bg:#f5faf9;--panel:#fff;--panel2:#edf7f4;--text:#12242a;--muted:#5e7479;--line:rgba(10,40,45,.12);background:#f5faf9}
+a{text-decoration:none;color:inherit}button,input,select,textarea{font:inherit}
+.nav{
+  position:sticky;top:0;z-index:1000;background:rgba(7,21,26,.78);
+  backdrop-filter:blur(18px);border-bottom:1px solid var(--line);min-height:72px;
+  display:flex;align-items:center;justify-content:space-between;padding:10px 5%;gap:15px
+}
+.logo{font-weight:900;font-size:21px}.logo span:first-child{color:var(--brand)}
+.tag{display:block;color:var(--muted);font-size:8px;letter-spacing:2px;margin-top:4px}
+.navlinks{display:flex;gap:16px;align-items:center;flex-wrap:wrap}
+.navlinks a{color:#c8d7d9;font-size:13px}.navlinks a:hover{color:var(--brand)}
+.auth-area{display:flex;gap:8px;align-items:center}
+.pill{background:var(--brand);color:#062019!important;padding:10px 14px;border-radius:11px;font-weight:800}
+.menu{display:none;background:none;border:0;color:white;font-size:25px}
+.user-pill{display:none;align-items:center;gap:8px;background:#ffffff0d;border:1px solid var(--line);padding:7px 10px;border-radius:999px;font-size:12px}
+.avatar{width:30px;height:30px;border-radius:50%;background:linear-gradient(135deg,var(--brand),var(--brand2));display:grid;place-items:center;color:#061a16;font-weight:900}
+
+.hero{min-height:650px;padding:85px 6%;display:grid;grid-template-columns:1.05fr .95fr;align-items:center;gap:30px;position:relative;overflow:hidden}
+.eyebrow{display:inline-flex;gap:8px;align-items:center;color:var(--brand);font-weight:800;font-size:12px;background:#39d3aa14;border:1px solid #39d3aa33;padding:9px 13px;border-radius:999px}
+.hero h1{font-size:clamp(44px,6vw,78px);line-height:.98;letter-spacing:-4px;margin:22px 0}.hero h1 span{color:var(--brand)}
+.hero p{max-width:650px;color:var(--muted);font-size:17px;line-height:1.8}
+.actions{display:flex;gap:12px;flex-wrap:wrap;margin-top:28px}
+.btn{border:0;border-radius:12px;padding:13px 18px;font-weight:800;cursor:pointer;transition:.25s}
+.primary{background:var(--brand);color:#052019}.secondary{background:#ffffff0f;color:var(--text);border:1px solid var(--line)}
+.btn:hover{transform:translateY(-3px);filter:brightness(1.06)}.btn:disabled{opacity:.5;cursor:not-allowed;transform:none}
+.scene{height:480px;position:relative;perspective:1000px}
+.desk{position:absolute;width:430px;height:42px;background:linear-gradient(#a96d44,#70452e);left:50%;bottom:60px;transform:translateX(-50%) rotateX(58deg);border-radius:12px;box-shadow:0 35px 50px #0007}
+.laptop{position:absolute;left:50%;top:115px;transform:translateX(-50%) rotateY(-10deg);width:230px;height:150px;transform-style:preserve-3d}
+.screen{height:140px;background:#071116;border:8px solid #42545a;border-radius:14px;padding:16px;color:#69f0c6;font:12px/1.8 monospace;box-shadow:0 30px 50px #0007}
+.base{position:absolute;width:270px;height:18px;background:#87989c;left:-20px;bottom:-16px;transform:skewX(-25deg);border-radius:5px}
+.book{position:absolute;left:35px;bottom:125px;width:155px;height:100px;transform:rotate(-12deg) translateZ(40px);background:linear-gradient(135deg,#526fe9,#2b398e);border-radius:8px;box-shadow:0 25px 35px #0005;padding:15px;font-size:11px;font-weight:800}
+.book:after{content:"EXAM\\A PREPARATION";white-space:pre;position:absolute;inset:8px;background:#fffdf3;color:#36485a;border-radius:4px;padding:18px;line-height:1.6}
+.cap{position:absolute;right:35px;top:80px;width:105px;height:22px;background:#18262c;transform:rotate(-12deg) rotateY(-8deg);box-shadow:0 18px 25px #0005}.cap:after{content:"";position:absolute;width:8px;height:70px;background:var(--gold);right:2px;top:12px;transform:rotate(-18deg)}
+.float{position:absolute;background:#ffffff1a;border:1px solid #ffffff22;backdrop-filter:blur(12px);padding:12px 14px;border-radius:13px;font-size:12px;font-weight:800;box-shadow:var(--shadow);animation:float 4s ease-in-out infinite}
+.f1{left:0;top:60px;color:var(--brand)}.f2{right:0;top:210px;color:#aab3ff;animation-delay:1s}.f3{right:40px;bottom:40px;color:var(--gold);animation-delay:2s}
+@keyframes float{50%{transform:translateY(-13px) rotate(1deg)}}
+
+.section{padding:90px 6%}.head{max-width:760px;margin:0 auto 42px;text-align:center}.head small{color:var(--brand);font-weight:900;letter-spacing:2px;font-size:10px}.head h2{font-size:clamp(30px,4vw,46px);margin:10px 0 14px;letter-spacing:-1.5px}.head p{color:var(--muted);line-height:1.75}
+.searchbar{max-width:900px;margin:-20px auto 0;padding:18px;background:#ffffff0f;border:1px solid var(--line);border-radius:16px;display:flex;gap:12px}.searchbar input{flex:1;background:#071116;border:1px solid var(--line);color:white;padding:13px 15px;border-radius:10px;outline:0}
+.grid{display:grid;grid-template-columns:repeat(4,1fr);gap:16px}.card{background:linear-gradient(180deg,#ffffff10,#ffffff08);border:1px solid var(--line);border-radius:18px;padding:22px;transition:.25s}.card:hover{transform:translateY(-6px);border-color:#39d3aa4d;box-shadow:var(--shadow)}
+.icon{width:48px;height:48px;border-radius:14px;display:grid;place-items:center;background:#39d3aa1a;font-size:22px;margin-bottom:15px}.card h3{margin-bottom:8px}.card p{color:var(--muted);font-size:13px;line-height:1.65}.link{display:inline-block;color:var(--brand);font-size:12px;font-weight:800;margin-top:15px}
+.langs{display:grid;grid-template-columns:repeat(5,1fr);gap:14px}.lang{padding:20px;border:1px solid var(--line);background:#0a1d23;border-radius:15px}.lang b{display:grid;place-items:center;width:46px;height:46px;border-radius:12px;background:#172f37;margin-bottom:12px;color:#a9b5ff}.lang p{color:var(--muted);font-size:12px;margin-top:5px}
+.sch{grid-template-columns:repeat(3,1fr)}.sch .card{min-height:220px}.badge{font-size:10px;color:var(--brand);border:1px solid #39d3aa33;background:#39d3aa14;padding:5px 8px;border-radius:999px}.top{display:flex;justify-content:space-between;align-items:center;margin-bottom:18px}.official{display:inline-block;margin-top:16px;background:var(--brand);color:#062019;padding:10px 12px;border-radius:9px;font-size:11px;font-weight:900}
+.practice-grid{display:grid;grid-template-columns:1.2fr .8fr;gap:18px}.level-row{display:flex;gap:8px;flex-wrap:wrap;margin:15px 0}.level{padding:9px 13px;border:1px solid var(--line);background:#ffffff09;color:var(--text);border-radius:999px;cursor:pointer;font-weight:800;font-size:12px}.level.active{border-color:var(--brand);background:#39d3aa1a;color:var(--brand)}
+.score{font-size:36px;font-weight:900;color:var(--gold)}.question{font-size:18px;font-weight:800;line-height:1.5;margin:15px 0}.options{display:grid;gap:9px}.option{padding:13px;border:1px solid var(--line);border-radius:10px;background:#071116;color:var(--text);cursor:pointer;text-align:left}.option:hover{border-color:#39d3aa66}.result{padding:12px;border-radius:10px;margin-top:12px;background:#39d3aa12;border:1px solid #39d3aa33;color:var(--brand)}
+.upload{max-width:900px;margin:auto;background:#ffffff0b;border:1px solid var(--line);border-radius:20px;padding:28px}.drop{border:2px dashed #2a6960;border-radius:16px;padding:42px;text-align:center;background:#39d3aa08;cursor:pointer}.drop input{display:none}.visibility{display:grid;grid-template-columns:repeat(4,1fr);gap:10px;margin-top:18px}.vis{border:1px solid var(--line);padding:15px;border-radius:12px;cursor:pointer}.vis:hover{border-color:var(--brand)}.vis small{display:block;color:var(--muted);margin-top:5px;line-height:1.4}.selectbox{margin-top:18px;width:100%;background:#071116;color:white;border:1px solid var(--line);padding:12px;border-radius:9px}
+.feed{max-width:850px;margin:auto;display:grid;gap:15px}.post{border:1px solid var(--line);background:#ffffff0a;border-radius:17px;padding:20px}.posthead{display:flex;gap:12px;align-items:center}.post p{color:#c5d4d6;line-height:1.65;font-size:13px;margin:14px 0}.postmeta{color:var(--muted);font-size:11px}.postactions{display:flex;gap:8px;margin-top:15px}.smallbtn{background:#071116;border:1px solid var(--line);color:#cbd9db;padding:8px 11px;border-radius:8px;cursor:pointer;font-size:11px}.stars{color:var(--gold);letter-spacing:2px}
+.interview-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:14px}.interview-grid .card{min-height:180px}
+.privacy{display:grid;grid-template-columns:1fr 1fr;gap:16px;max-width:950px;margin:auto}.privacy .card ul{list-style:none;margin-top:12px}.privacy li{color:var(--muted);font-size:12px;padding:7px 0;border-bottom:1px solid var(--line)}
+.ai-box{max-width:900px;margin:auto}.chat{height:300px;overflow:auto;background:#071116;border:1px solid var(--line);border-radius:15px;padding:15px;display:flex;flex-direction:column;gap:10px}.msg{max-width:78%;padding:10px 12px;border-radius:12px;font-size:13px;line-height:1.5}.bot{align-self:flex-start;background:#ffffff0b;color:#d6e3e5}.me{align-self:flex-end;background:#39d3aa1a;color:#dffcf4}.chatbar{display:flex;gap:8px;margin-top:10px}.chatbar input{flex:1;background:#071116;border:1px solid var(--line);color:white;padding:12px;border-radius:10px}
+.cta{margin:20px 6% 80px;padding:55px;border-radius:25px;background:linear-gradient(135deg,#123b3d,#1c2857);border:1px solid var(--line);display:grid;grid-template-columns:1fr 1fr;gap:30px;align-items:center}.cta p{color:#b7c9cb;line-height:1.8}
+footer{padding:45px 6%;border-top:1px solid var(--line);color:var(--muted);display:flex;justify-content:space-between;gap:20px;font-size:12px}
+.toast{position:fixed;right:20px;bottom:20px;z-index:3000;background:#102b33;border:1px solid #39d3aa40;color:white;padding:13px 16px;border-radius:11px;box-shadow:var(--shadow);transform:translateY(90px);opacity:0;transition:.3s;font-size:12px}.toast.show{transform:none;opacity:1}
+.fx{position:fixed;pointer-events:none;z-index:2500;font-size:22px;animation:burst .9s ease-out forwards}@keyframes burst{0%{opacity:1;transform:translate(0,0) scale(.5)}100%{opacity:0;transform:translate(var(--x),var(--y)) rotate(240deg) scale(1.5)}}
+.modal{display:none;position:fixed;inset:0;z-index:2000;background:#000b;backdrop-filter:blur(7px);align-items:center;justify-content:center;padding:20px}.modal.show{display:flex}.modalbox{width:min(520px,100%);background:#0d2229;border:1px solid var(--line);border-radius:18px;padding:25px;box-shadow:var(--shadow)}.modalbox input,.modalbox textarea{width:100%;margin-top:10px;background:#071116;border:1px solid var(--line);color:white;padding:12px;border-radius:9px;outline:0}.close{float:right;background:#ffffff12;border:0;color:white;width:34px;height:34px;border-radius:50%;cursor:pointer}.switch{color:var(--brand);cursor:pointer;font-weight:800}
+.hidden{display:none!important}
+@media(max-width:1000px){.grid{grid-template-columns:repeat(2,1fr)}.langs{grid-template-columns:repeat(3,1fr)}.sch{grid-template-columns:repeat(2,1fr)}.interview-grid{grid-template-columns:repeat(2,1fr)}.practice-grid{grid-template-columns:1fr}.hero{grid-template-columns:1fr}.scene{order:-1}.visibility{grid-template-columns:repeat(2,1fr)}}
+@media(max-width:650px){.navlinks{display:none}.menu{display:block}.hero{padding-top:50px}.hero h1{letter-spacing:-2px}.scene{height:390px}.grid,.langs,.sch,.privacy,.cta,.interview-grid{grid-template-columns:1fr}.visibility{grid-template-columns:1fr}.searchbar{margin:0 6%;flex-direction:column}.actions{flex-direction:column}.actions .btn{width:100%}footer{flex-direction:column}.desk{width:330px}.laptop{transform:translateX(-50%) scale(.8)}}
+
+.settings-list{display:grid;gap:8px;margin-top:15px}
+.setting-row{display:flex;justify-content:space-between;align-items:center;width:100%;padding:12px 13px;border:1px solid var(--line);border-radius:12px;background:transparent;color:var(--text);cursor:pointer;text-align:left}
+.setting-row:hover{border-color:#39d3aa66;background:#39d3aa0a}
+.danger-row{color:var(--danger)}
+.setting-label{display:block;font-size:12px;font-weight:800;margin-top:16px;margin-bottom:7px}
+.privacy-note{margin-top:14px;padding:11px 12px;border:1px solid var(--line);border-radius:12px;color:var(--muted);font-size:12px;line-height:1.55}
+.toggle-row{display:flex;justify-content:space-between;gap:16px;align-items:center;padding:13px 0;border-bottom:1px solid var(--line);cursor:pointer}
+.toggle-row:last-child{border-bottom:0}
+.toggle-row span{display:flex;flex-direction:column;gap:4px}
+.toggle-row small{color:var(--muted);font-size:11px;line-height:1.4}
+.toggle-row input{width:19px;height:19px;accent-color:#39d3aa}
+.clean-list{list-style:none;padding:0;margin:15px 0 0;display:grid;gap:10px;color:var(--muted);font-size:13px}
+.privacy-delete-card{margin-top:24px;display:flex;justify-content:space-between;gap:20px;align-items:center;border-color:#ff6b7a55}
+.btn.danger{background:#ff6b7a18;border:1px solid #ff6b7a66;color:var(--danger)}
+.form-status{font-size:12px;color:var(--muted);margin-top:12px}
+
+
+.history-grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:18px}
+.history-stat{display:flex;justify-content:space-between;padding:12px 0;border-bottom:1px solid var(--line);font-size:13px}
+.history-stat b{font-size:16px}
+.history-list{display:grid;gap:9px;margin-top:14px}
+.history-chip{padding:10px 12px;border:1px solid var(--line);border-radius:11px;font-size:12px}
+.history-item{padding:11px 12px;border:1px solid var(--line);border-radius:11px;font-size:12px;line-height:1.5}
+.history-item small{display:block;color:var(--muted);margin-top:4px}
+.attempt-history{display:grid;gap:8px;margin-top:16px}
+.attempt-row{display:grid;grid-template-columns:28px 1fr auto;gap:10px;align-items:center;padding:11px;border:1px solid var(--line);border-radius:11px}
+.attempt-row small{display:block;color:var(--muted);margin-top:3px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;max-width:600px}
+.attempt-time{font-size:11px;color:var(--muted)}
+.question-meta{margin-top:12px;color:var(--muted);font-size:11px;border-top:1px solid var(--line);padding-top:10px}
+@media(max-width:760px){.history-grid{grid-template-columns:1fr}.attempt-row{grid-template-columns:24px 1fr}.attempt-time{grid-column:2}}
+
+</style>
+</head>
+
+<body>
+
+<nav class="nav">
+  <a class="logo" href="#home"><span>Shiksha</span> Sahay <span class="tag">EMPOWERING STUDENT FUTURES</span></a>
+
+  <div class="navlinks">
+    <a href="#exams">Study</a>
+    <a href="#coding">Skills</a>
+    <a href="#practice">Practice</a>
+    <a href="#interviews">Interviews</a>
+    <a href="#scholarships">Scholarships</a>
+    <a href="#community">Community</a>
+    <a href="#feedback">Feedback</a>
+    <a href="#learning-history">History</a>
+    <a href="#privacy">Privacy</a>
+  </div>
+
+  <div class="auth-area">
+    <div id="userPill" class="user-pill">
+      <div id="userAvatar" class="avatar">S</div>
+      <span id="userName">Student</span>
+      <button class="smallbtn" onclick="logout()">Logout</button>
+    </div>
+    <button id="loginBtn" class="btn primary" onclick="openAuth('login')">Login</button>
+    <button id="signupBtn" class="btn secondary" onclick="openAuth('signup')">Sign Up</button>
+  </div>
+
+  <button class="menu" onclick="toast('Use the section links or scroll down on mobile.')">☰</button>
+</nav>
+
+<section class="hero" id="home">
+  <div>
+    <div class="eyebrow">🎓 One free place for student growth</div>
+    <h1>Learn. Practice. <span>Move Forward.</span></h1>
+    <p>Study resources, programming practice, interviews, scholarships, communication skills and a student community — organized in one place.</p>
+    <div class="actions">
+      <button class="btn primary" onclick="go('practice')">Start practicing →</button>
+      <button class="btn secondary" onclick="go('scholarships')">Find scholarships</button>
+      <button class="btn secondary" onclick="openAuth('signup')">Create free account</button>
+    </div>
+  </div>
+
+  <div class="scene">
+    <div class="desk"></div>
+    <div class="laptop">
+      <div class="screen">class Student {<br>&nbsp;&nbsp;learn();<br>&nbsp;&nbsp;practice();<br>&nbsp;&nbsp;prepare();<br>&nbsp;&nbsp;buildFuture();<br>}</div>
+      <div class="base"></div>
+    </div>
+    <div class="book"></div>
+    <div class="cap"></div>
+    <div class="float f1">📚 Study resources</div>
+    <div class="float f2">💻 Interview prep</div>
+    <div class="float f3">🎓 Scholarships</div>
+  </div>
+</section>
+
+<div class="searchbar">
+  <b>🔎 Search</b>
+  <input id="search" oninput="filterCards()" placeholder="Search Java, C++, scholarship, exam notes, interviews...">
+</div>
+
+<section class="section" id="exams">
+  <div class="head">
+    <small>STUDY & EXAM PREPARATION</small>
+    <h2>Find useful resources without searching everywhere.</h2>
+    <p>Build your own study library with notes, PDFs, previous papers and revision material.</p>
+  </div>
+  <div class="grid searchable">
+    <article class="card"><div class="icon">📘</div><h3>Study PDFs</h3><p>Subject-wise preparation material and notes.</p><button class="btn secondary" onclick="openResourceLibrary()">Open library</button></article>
+    <article class="card"><div class="icon">📝</div><h3>Previous Papers</h3><p>Practice previous examination questions.</p><button class="btn secondary" onclick="go('practice')">Practice</button></article>
+    <article class="card"><div class="icon">🧮</div><h3>Formula Sheets</h3><p>Quick revision material for important formulas.</p><button class="btn secondary" onclick="toast('Formula resources can be added later.')">Revise</button></article>
+    <article class="card"><div class="icon">🎯</div><h3>Daily Preparation</h3><p>Small daily tasks so preparation becomes a habit.</p><button class="btn secondary" onclick="go('practice')">Start</button></article>
+  </div>
+  <div id="resourceLibrary" style="margin-top:24px;display:none">
+    <div class="head">
+      <small>YOUR STUDY LIBRARY</small>
+      <h2>Available PDFs and notes</h2>
+      <p>Open or download study material published by Shiksha Sahay.</p>
+    </div>
+    <div id="resourceList" class="grid">
+      <article class="card"><p>Loading study resources…</p></article>
+    </div>
+  </div>
+</section>
+
+<section class="section" id="coding">
+  <div class="head">
+    <small>SKILLS & LEARNING HUB</small>
+    <h2>Learn programming languages and technical tools.</h2>
+    <p>Choose a skill, learn the basics with real-life examples, explore its history, practice questions and output-based problems, and progress from Basic to Moderate to Advanced.</p>
+  </div>
+
+  <div class="grid searchable" id="skillCards">
+    <article class="card skill-card" data-skill="C" data-category="Programming">
+      <div class="icon">C</div><h3>C Programming</h3>
+      <p>Variables, conditions, loops, arrays, functions, pointers and basic problem solving.</p>
+      <button class="btn secondary" onclick="openSkill('C')">Explore C →</button>
+    </article>
+    <article class="card skill-card" data-skill="C++" data-category="Programming">
+      <div class="icon">C++</div><h3>C++</h3>
+      <p>OOP, arrays, strings, STL, functions and interview-oriented problem solving.</p>
+      <button class="btn secondary" onclick="openSkill('C++')">Explore C++ →</button>
+    </article>
+    <article class="card skill-card" data-skill="Java" data-category="Programming">
+      <div class="icon">☕</div><h3>Java</h3><p>Core Java, OOP, collections, exceptions and interview fundamentals.</p>
+      <button class="btn secondary" onclick="openSkill('Java')">Explore Java →</button>
+    </article>
+    <article class="card skill-card" data-skill="Python" data-category="Programming">
+      <div class="icon">🐍</div><h3>Python</h3><p>Syntax, conditions, loops, lists, dictionaries, functions and problem solving.</p>
+      <button class="btn secondary" onclick="openSkill('Python')">Explore Python →</button>
+    </article>
+    <article class="card skill-card" data-skill="JavaScript" data-category="Programming">
+      <div class="icon">JS</div><h3>JavaScript</h3><p>Variables, functions, arrays, DOM basics and web programming.</p>
+      <button class="btn secondary" onclick="openSkill('JavaScript')">Explore JavaScript →</button>
+    </article>
+    <article class="card skill-card" data-skill="HTML" data-category="Web">
+      <div class="icon">🌐</div><h3>HTML</h3><p>Build the structure of webpages and understand semantic elements.</p>
+      <button class="btn secondary" onclick="openSkill('HTML')">Explore HTML →</button>
+    </article>
+    <article class="card skill-card" data-skill="CSS" data-category="Web">
+      <div class="icon">🎨</div><h3>CSS</h3><p>Layouts, responsive design, colors, animations and modern UI basics.</p>
+      <button class="btn secondary" onclick="openSkill('CSS')">Explore CSS →</button>
+    </article>
+    <article class="card skill-card" data-skill="AutoCAD" data-category="Technical Tools">
+      <div class="icon">📐</div><h3>AutoCAD</h3><p>Drawing basics, coordinates, layers, dimensions, commands and technical drafting.</p>
+      <button class="btn secondary" onclick="openSkill('AutoCAD')">Explore AutoCAD →</button>
+    </article>
+    <article class="card skill-card" data-skill="MATLAB" data-category="Technical Tools">
+      <div class="icon">📊</div><h3>MATLAB</h3><p>Numerical computing, plotting, matrices and engineering applications.</p>
+      <button class="btn secondary" onclick="openSkill('MATLAB')">Explore MATLAB →</button>
+    </article>
+    <article class="card skill-card" data-skill="Arduino" data-category="Technical Tools">
+      <div class="icon">🔌</div><h3>Arduino</h3><p>Microcontroller basics, sensors, components and simple embedded projects.</p>
+      <button class="btn secondary" onclick="openSkill('Arduino')">Explore Arduino →</button>
+    </article>
+    <article class="card skill-card" data-skill="TINA-TI" data-category="Technical Tools">
+      <div class="icon">⚡</div><h3>TINA-TI</h3><p>Circuit simulation, measurements and electronics learning.</p>
+      <button class="btn secondary" onclick="openSkill('TINA-TI')">Explore TINA-TI →</button>
+    </article>
+    <article class="card skill-card" data-skill="SQL" data-category="Data">
+      <div class="icon">🗄️</div><h3>SQL</h3><p>Databases, SELECT, filtering, joins, grouping and basic database thinking.</p>
+      <button class="btn secondary" onclick="openSkill('SQL')">Explore SQL →</button>
+    </article>
+  </div>
+
+  <div class="card" style="margin-top:25px;text-align:center">
+    <div class="icon" style="margin:0 auto 12px">➕</div>
+    <h3>Want another skill?</h3>
+    <p>Tell us which language, software or technical skill students need. New skills can be added later without rebuilding the whole website.</p>
+    <button class="btn primary" onclick="go('feedback')">Suggest a skill</button>
+  </div>
+</section>
+
+<section class="section" id="practice">
+  <div class="head">
+    <small>DAILY PRACTICE</small>
+    <h2>Practice in simple 5-question batches.</h2>
+    <p>You always start with 5 questions. After finishing them, you decide whether you want 5 more. You control your practice time.</p>
+  </div>
+
+  <div class="practice-grid">
+    <div class="card">
+      <div class="top">
+        <div>
+          <span class="badge">TODAY</span>
+          <h3 style="margin-top:10px">Programming Practice</h3>
+          <div class="postmeta" id="batchInfo">Batch 1 • 5 questions</div>
+        </div>
+        <div class="score" id="score">0</div>
+      </div>
+
+      <div class="level-row">
+        <button class="level active" onclick="setLevel('Easy',this)">🟢 Easy</button>
+        <button class="level" onclick="setLevel('Moderate',this)">🟡 Moderate</button>
+        <button class="level" onclick="setLevel('Hard',this)">🔴 Hard</button>
+        <button class="level" onclick="setLevel('Pro',this)">🟣 Pro</button>
+      </div>
+
+      <div id="questionArea"></div>
+
+      <div id="moreQuestionsBox" class="hidden" style="margin-top:18px;padding:18px;border:1px solid #39d3aa44;border-radius:14px;background:#39d3aa0b">
+        <h3>🎉 You finished this batch!</h3>
+        <p style="color:var(--muted);font-size:13px;margin-top:7px">
+          Would you like to continue practicing? We'll add another 5 questions.
+        </p>
+        <div class="actions" style="margin-top:15px">
+          <button class="btn primary" onclick="addMoreQuestions()">Yes, give me 5 more</button>
+          <button class="btn secondary" onclick="finishPractice()">No, finish for today</button>
+        </div>
+      </div>
+    </div>
+
+    <div class="card">
+      <div class="icon">🏆</div>
+      <h3>Your progress</h3>
+      <p>Your practice is divided into batches so students can stop whenever they want instead of being forced to answer a fixed number of questions.</p>
+
+      <div style="margin-top:20px">
+        <div class="postmeta">Questions completed today</div>
+        <h2 id="todayQuestions">0</h2>
+      </div>
+
+      <div style="margin-top:18px">
+        <div class="postmeta">Questions in current batch</div>
+        <h2 id="batchQuestions">5</h2>
+      </div>
+
+      <div style="margin-top:18px">
+        <div class="postmeta">Daily streak</div>
+        <h2 id="streak">0 days</h2>
+      </div>
+
+      <div style="margin-top:18px">
+        <div class="postmeta">Weekly rank</div>
+        <h2 id="rank">—</h2>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section class="section" id="weekly">
+  <div class="head">
+    <small>WEEKLY QUIZ</small>
+    <h2>Four difficulty levels.</h2>
+    <p>Later this section will generate a real weekly quiz from your database and calculate the leaderboard.</p>
+  </div>
+  <div class="grid">
+    <article class="card"><div class="icon">🟢</div><h3>Easy</h3><p>Fundamentals and confidence-building questions.</p></article>
+    <article class="card"><div class="icon">🟡</div><h3>Moderate</h3><p>Application and reasoning questions.</p></article>
+    <article class="card"><div class="icon">🔴</div><h3>Hard</h3><p>Interview-oriented problem solving.</p></article>
+    <article class="card"><div class="icon">🟣</div><h3>Pro</h3><p>Advanced challenge for serious learners.</p></article>
+  </div>
+</section>
+
+<section class="section" id="interviews">
+  <div class="head">
+    <small>INTERVIEW HUB</small>
+    <h2>Prepare for more than just job interviews.</h2>
+    <p>Different goals need different preparation. This section is designed to grow with student needs.</p>
+  </div>
+  <div class="interview-grid searchable">
+    <article class="card"><div class="icon">💼</div><h3>Job Interviews</h3><p>HR, technical, aptitude, resume and mock interview preparation.</p></article>
+    <article class="card"><div class="icon">🎓</div><h3>Scholarship Interviews</h3><p>Common questions, self-introduction, goals and scholarship-specific practice.</p></article>
+    <article class="card"><div class="icon">🚀</div><h3>Internship Interviews</h3><p>Prepare for technical and HR rounds for internships.</p></article>
+    <article class="card"><div class="icon">🏫</div><h3>College / Admission</h3><p>Admission, fellowship and academic opportunity interview practice.</p></article>
+    <article class="card"><div class="icon">⚙️</div><h3>Core Engineering</h3><p>ECE, CSE, Mechanical, Electrical, Civil and other branch preparation.</p></article>
+    <article class="card"><div class="icon">🗣️</div><h3>Communication</h3><p>Professional speaking, client communication and interview English.</p></article>
+    <article class="card"><div class="icon">📄</div><h3>Resume Help</h3><p>Build a clear student resume and prepare to explain your projects.</p></article>
+    <article class="card"><div class="icon">🤝</div><h3>Group Discussion</h3><p>Practice ideas, structure, confidence and professional communication.</p></article>
+  </div>
+</section>
+
+<section class="section" id="scholarships">
+  <div class="head">
+    <small>SCHOLARSHIPS & OPPORTUNITIES</small>
+    <h2>Find opportunities and go to the official source.</h2>
+    <p>Scholarship information should always link students to the official application source. We can expand this directory later.</p>
+  </div>
+  <div class="grid sch searchable">
+    <article class="card">
+      <div class="top"><h3>e-Kalyan</h3><span class="badge">SCHOLARSHIP</span></div>
+      <p>Scholarship information and application resources for eligible students in supported states.</p>
+      <a class="official" href="https://ekalyan.cgg.gov.in/" target="_blank" rel="noopener">Official source ↗</a>
+    </article>
+    <article class="card"><div class="top"><h3>National Scholarships</h3><span class="badge">PORTAL</span></div><p>A central place to discover scholarship schemes and official application information.</p><a class="official" href="https://scholarships.gov.in/" target="_blank" rel="noopener">Official source ↗</a></article>
+    <article class="card"><div class="top"><h3>More opportunities</h3><span class="badge">COMING</span></div><p>We will build a searchable scholarship directory with eligibility, documents, deadlines and interview details.</p><button class="btn secondary" onclick="toast('Scholarship directory is planned for the next stage.')">Coming next</button></article>
+  </div>
+</section>
+
+<section class="section" id="english">
+  <div class="head">
+    <small>COMMUNICATION SKILLS</small>
+    <h2>English for study, jobs and real communication.</h2>
+    <p>Practice speaking, interview answers, professional emails and client communication.</p>
+  </div>
+  <div class="grid">
+    <article class="card"><div class="icon">🗣️</div><h3>Speaking</h3><p>Short daily speaking prompts and self-introduction practice.</p></article>
+    <article class="card"><div class="icon">💼</div><h3>Interview English</h3><p>Practice common interview questions in simple English.</p></article>
+    <article class="card"><div class="icon">📧</div><h3>Professional Email</h3><p>Learn clear and respectful email communication.</p></article>
+    <article class="card"><div class="icon">🤝</div><h3>Client Communication</h3><p>Useful phrases for professional conversations.</p></article>
+  </div>
+</section>
+
+<section class="section" id="ai">
+  <div class="head">
+    <small>AI STUDENT BUDDY</small>
+    <h2>A small helper for small problems.</h2>
+    <p>This first version uses a simple local helper. A real AI API can be connected later without redesigning the website.</p>
+  </div>
+  <div class="ai-box">
+    <div class="chat" id="chat">
+      <div class="msg bot">Hi! 👋 I'm Shiksha Buddy. Ask me where to find something or tell me what you're practicing.</div>
+    </div>
+    <div class="chatbar">
+      <input id="chatInput" placeholder="Example: Where can I practice Java?" onkeydown="if(event.key==='Enter')sendChat()">
+      <button class="btn primary" onclick="sendChat()">Send</button>
+    </div>
+  </div>
+</section>
+
+<section class="section" id="upload">
+  <div class="head">
+    <small>STUDENT DOCUMENTS</small>
+    <h2>Share useful resources with the community.</h2>
+    <p>Upload notes, PDFs and other learning documents. Privacy controls will be connected to your account.</p>
+  </div>
+  <div class="upload">
+    <div class="drop" onclick="document.getElementById('file').click()">
+      <input id="file" type="file" accept=".pdf,.doc,.docx,.ppt,.pptx,.txt" onchange="showFileName()">
+      <div style="font-size:35px">☁️</div>
+      <h3 id="fileLabel">Click to choose a document</h3>
+      <p style="color:var(--muted);margin-top:8px">PDF, DOC, PPT or TXT</p>
+    </div>
+
+    <div class="visibility">
+      <label class="vis"><input type="radio" name="visibility" value="private" checked> 🔒 Private<small>Only you.</small></label>
+      <label class="vis"><input type="radio" name="visibility" value="followers"> 👥 Followers<small>Your followers.</small></label>
+      <label class="vis"><input type="radio" name="visibility" value="public"> 🌍 Everyone<small>Public users.</small></label>
+      <label class="vis"><input type="radio" name="visibility" value="exception"> 🚫 Exceptions<small>Advanced privacy later.</small></label>
+    </div>
+
+    <button class="btn primary" style="width:100%;margin-top:15px" onclick="uploadDocument()">Post document</button>
+    <p id="uploadStatus" style="color:var(--muted);font-size:12px;margin-top:12px"></p>
+  </div>
+</section>
+
+<section class="section" id="community">
+  <div class="head">
+    <small>COMMUNITY</small>
+    <h2>Learn together.</h2>
+    <p>Follow students, discover useful resources and eventually build a trusted learning community.</p>
+  </div>
+  <div class="feed">
+    <article class="post">
+      <div class="posthead"><div class="avatar">A</div><div><b>Student Contributor</b><div class="postmeta">Shared a study resource</div></div></div>
+      <p>Useful revision notes can save another student hours of searching. Shiksha Sahay will make resource sharing easier.</p>
+      <div class="postactions"><button class="smallbtn" onclick="toast('Like system will be connected to the database later.')">♡ Like</button><button class="smallbtn" onclick="toast('Follow system will be connected later.')">Follow</button><span class="stars">★★★★★</span></div>
+    </article>
+  </div>
+</section>
+
+
+
+<section class="section" id="learning-history">
+  <div class="head">
+    <small>MY LEARNING HISTORY</small>
+    <h2>See what you learned and where you struggled.</h2>
+    <p>Every practice session can record your attempts, mistakes, time taken and improvement. Times shown as “target time” are recommended practice estimates, not claims about an official universal answer time.</p>
+  </div>
+
+  <div class="history-grid">
+    <div class="card">
+      <div class="icon">📚</div>
+      <h3>Today</h3>
+      <div class="history-stat"><span>Questions solved</span><b id="histSolved">0</b></div>
+      <div class="history-stat"><span>Correct</span><b id="histCorrect">0</b></div>
+      <div class="history-stat"><span>Accuracy</span><b id="histAccuracy">0%</b></div>
+      <div class="history-stat"><span>Time spent</span><b id="histTime">0s</b></div>
+    </div>
+
+    <div class="card">
+      <div class="icon">🧠</div>
+      <h3>What you learned</h3>
+      <div id="learnedTopics" class="history-list"><p class="postmeta">Solve questions to build your learning history.</p></div>
+    </div>
+
+    <div class="card">
+      <div class="icon">⚠️</div>
+      <h3>Your mistakes</h3>
+      <div id="mistakeTopics" class="history-list"><p class="postmeta">Mistakes will appear here with explanations.</p></div>
+    </div>
+
+    <div class="card">
+      <div class="icon">⏱️</div>
+      <h3>Time analysis</h3>
+      <div id="timeAnalysis" class="history-list"><p class="postmeta">Your actual solving time will be compared with the question's recommended target time.</p></div>
+    </div>
+  </div>
+
+  <div class="card" style="margin-top:24px">
+    <div class="top">
+      <div>
+        <h3>Detailed attempt history</h3>
+        <p class="postmeta">Stored locally in this version. Supabase storage can be connected later for cross-device history.</p>
+      </div>
+      <button class="btn secondary" onclick="clearLearningHistory()">Clear local history</button>
+    </div>
+    <div id="attemptHistory" class="attempt-history"></div>
+  </div>
+</section>
+
+<section class="section" id="feedback">
+  <div class="head">
+    <small>STUDENT FEEDBACK</small>
+    <h2>Help us make Shiksha Sahay better.</h2>
+    <p>Your feedback will guide future features. Tell us what you like, what is missing, and what would help you learn better.</p>
+  </div>
+
+  <div class="upload" style="max-width:850px">
+    <div class="top">
+      <div>
+        <h3>💬 Student Feedback</h3>
+        <p style="color:var(--muted);font-size:12px;margin-top:5px">You can submit feedback even if you are not logged in.</p>
+      </div>
+      <span class="badge">YOUR VOICE MATTERS</span>
+    </div>
+
+    <label style="font-size:12px;font-weight:800">How useful is Shiksha Sahay?</label>
+    <div class="level-row" id="ratingButtons">
+      <button type="button" class="level" onclick="setFeedbackRating(1,this)">⭐ 1</button>
+      <button type="button" class="level" onclick="setFeedbackRating(2,this)">⭐ 2</button>
+      <button type="button" class="level" onclick="setFeedbackRating(3,this)">⭐ 3</button>
+      <button type="button" class="level" onclick="setFeedbackRating(4,this)">⭐ 4</button>
+      <button type="button" class="level" onclick="setFeedbackRating(5,this)">⭐ 5</button>
+    </div>
+
+    <label style="font-size:12px;font-weight:800;display:block;margin-top:12px">What do you like most?</label>
+    <select id="feedbackLike" class="selectbox">
+      <option value="">Choose one</option>
+      <option>📚 Study resources</option>
+      <option>💻 Programming practice</option>
+      <option>🧠 Daily questions</option>
+      <option>🏆 Points and leaderboard</option>
+      <option>💼 Interview preparation</option>
+      <option>🎓 Scholarships</option>
+      <option>🗣️ English communication</option>
+      <option>🤖 AI Student Buddy</option>
+      <option>👥 Community</option>
+      <option>Everything</option>
+    </select>
+
+    <label style="font-size:12px;font-weight:800;display:block;margin-top:15px">What new feature would you like?</label>
+    <input id="feedbackFeature" class="selectbox" style="margin-top:8px" placeholder="Example: mock interviews, more ECE questions, coding contests...">
+
+    <label style="font-size:12px;font-weight:800;display:block;margin-top:15px">What should we improve?</label>
+    <textarea id="feedbackImprove" class="selectbox" style="min-height:100px;resize:vertical" placeholder="Tell us what is difficult, missing or confusing."></textarea>
+
+    <label style="font-size:12px;font-weight:800;display:block;margin-top:15px">Any other suggestion?</label>
+    <textarea id="feedbackOther" class="selectbox" style="min-height:80px;resize:vertical" placeholder="Anything else you want us to know?"></textarea>
+
+    <button class="btn primary" style="width:100%;margin-top:16px" onclick="submitFeedback()">Submit Feedback</button>
+    <p id="feedbackStatus" style="color:var(--muted);font-size:12px;margin-top:12px"></p>
+  </div>
+</section>
+
+<section class="section" id="privacy">
+  <div class="head">
+    <small>PRIVACY & SECURITY</small>
+    <h2>You control your account and your data.</h2>
+    <p>Choose who can see your profile and documents, control AI access, manage sessions, and permanently delete your account when you want.</p>
+  </div>
+
+  <div class="privacy-grid">
+    <div class="card">
+      <div class="icon">👤</div>
+      <h3>Account controls</h3>
+      <p>Manage your sign-in and account preferences.</p>
+      <div class="settings-list">
+        <button class="setting-row" onclick="toast('Password reset will use Supabase Auth.')"><span>🔑 Change / reset password</span><b>→</b></button>
+        <button class="setting-row" onclick="logoutAllDevices()"><span>🚪 Sign out</span><b>→</b></button>
+        <button class="setting-row danger-row" onclick="confirmDeleteAccount()"><span>🗑️ Delete my account</span><b>→</b></button>
+      </div>
+    </div>
+
+    <div class="card">
+      <div class="icon">📄</div>
+      <h3>Document privacy</h3>
+      <p>Set a default visibility for documents you upload.</p>
+
+      <label class="setting-label">Default document visibility</label>
+      <select id="defaultDocPrivacy" class="selectbox" onchange="savePrivacySetting('defaultDocPrivacy',this.value)">
+        <option value="private">🔒 Private — only me</option>
+        <option value="followers">👥 Followers only</option>
+        <option value="public">🌎 Public</option>
+      </select>
+
+      <div class="privacy-note">
+        🔒 Private documents must never be exposed through a public file URL. Real protection will be enforced by Supabase Storage policies.
+      </div>
+
+      <div class="actions">
+        <button class="btn secondary" onclick="deleteMyDocuments()">🗑️ Delete all my documents</button>
+      </div>
+    </div>
+
+    <div class="card">
+      <div class="icon">🛡️</div>
+      <h3>Profile & community privacy</h3>
+
+      <label class="toggle-row">
+        <span><b>Profile visible to search</b><small>Allow students to find your profile.</small></span>
+        <input type="checkbox" id="profileSearch" checked onchange="savePrivacySetting('profileSearch',this.checked)">
+      </label>
+
+      <label class="toggle-row">
+        <span><b>Show activity</b><small>Allow followers to see learning activity.</small></span>
+        <input type="checkbox" id="showActivity" onchange="savePrivacySetting('showActivity',this.checked)">
+      </label>
+
+      <label class="toggle-row">
+        <span><b>Show leaderboard profile</b><small>Use an anonymous name when disabled.</small></span>
+        <input type="checkbox" id="leaderboardProfile" checked onchange="savePrivacySetting('leaderboardProfile',this.checked)">
+      </label>
+
+      <label class="toggle-row">
+        <span><b>Followers require approval</b><small>Approve follower requests yourself.</small></span>
+        <input type="checkbox" id="approveFollowers" checked onchange="savePrivacySetting('approveFollowers',this.checked)">
+      </label>
+    </div>
+
+    <div class="card">
+      <div class="icon">🤖</div>
+      <h3>AI & personalization</h3>
+      <p>You decide whether your content can be used by learning assistance features.</p>
+
+      <label class="toggle-row">
+        <span><b>Allow AI to use selected documents</b><small>AI should only use a document after you explicitly allow it.</small></span>
+        <input type="checkbox" id="aiDocuments" onchange="savePrivacySetting('aiDocuments',this.checked)">
+      </label>
+
+      <label class="toggle-row">
+        <span><b>Personalized recommendations</b><small>Use practice activity to suggest learning resources.</small></span>
+        <input type="checkbox" id="personalized" checked onchange="savePrivacySetting('personalized',this.checked)">
+      </label>
+
+      <div class="privacy-note">
+        💡 Turning this off should not delete your account or documents. It only changes how personalization works.
+      </div>
+    </div>
+
+    <div class="card">
+      <div class="icon">🔐</div>
+      <h3>Security</h3>
+      <ul class="clean-list">
+        <li>✓ Email verification</li>
+        <li>✓ Password reset</li>
+        <li>✓ Session sign-out</li>
+        <li>✓ Database Row Level Security</li>
+        <li>✓ Private storage policies</li>
+        <li>✓ File type and size limits</li>
+        <li>✓ Report/block controls for community features</li>
+      </ul>
+      <div class="privacy-note">Some items require the corresponding Supabase backend rules before they become real security controls.</div>
+    </div>
+
+    <div class="card">
+      <div class="icon">📥</div>
+      <h3>Your data</h3>
+      <p>When the backend is connected, students should be able to request a copy of their account data and understand what is stored.</p>
+      <div class="actions">
+        <button class="btn secondary" onclick="requestDataCopy()">Request my data</button>
+        <button class="btn secondary" onclick="openPrivacyPolicy()">Privacy policy</button>
+      </div>
+      <p id="privacyActionStatus" class="form-status"></p>
+    </div>
+  </div>
+
+  <div class="card privacy-delete-card">
+    <div>
+      <div class="icon">⚠️</div>
+      <h3>Danger zone</h3>
+      <p>Deleting your account is intended to be permanent. Before the backend action is enabled, we will show exactly what will be deleted and what may be retained for legitimate operational or legal reasons.</p>
+    </div>
+    <button class="btn danger" onclick="confirmDeleteAccount()">Delete account permanently</button>
+  </div>
+</section>
+
+<section class="cta">
+  <div><div class="eyebrow">🌱 Built for students</div><h2 style="font-size:38px;margin-top:15px">One place to learn, practice and prepare.</h2></div>
+  <div><p>Shiksha Sahay is designed to organize free resources from trusted sources while giving students their own learning space.</p><button class="btn primary" onclick="openAuth('signup')">Create your free account →</button></div>
+</section>
+
+<footer>
+  <div>© 2026 Shiksha Sahay — Empowering Student Futures</div><div style="text-align:center">Built to grow with students • New skills can be added anytime</div>
+  <div>Learn • Practice • Prepare • Grow</div>
+</footer>
+
+
+<!-- SKILL LEARNING MODAL -->
+<div class="modal" id="skillModal">
+  <div class="modalbox" style="max-width:720px">
+    <button class="close" onclick="closeSkill()">×</button>
+    <div class="eyebrow" id="skillCategory">LEARNING</div>
+    <h2 id="skillTitle" style="margin-top:15px">Skill</h2>
+    <p id="skillIntro" style="color:var(--muted);margin-top:7px"></p>
+
+    <div class="level-row" style="margin-top:20px">
+      <button class="level active" onclick="skillTab('learn',this)">📖 Learn</button>
+      <button class="level" onclick="skillTab('history',this)">🕰️ History</button>
+      <button class="level" onclick="skillTab('practice',this)">❓ Questions</button>
+      <button class="level" onclick="skillTab('output',this)">💻 Output</button>
+      <button class="level" onclick="skillTab('real',this)">🌍 Real-life</button>
+    </div>
+
+    <div id="skillContent"></div>
+  </div>
+</div>
+
+<!-- AUTH MODAL -->
+<div class="modal" id="authModal">
+  <div class="modalbox">
+    <button class="close" onclick="closeAuth()">×</button>
+    <div id="authLogin">
+      <div class="eyebrow">🔐 STUDENT ACCOUNT</div>
+      <h2 style="margin-top:15px">Welcome back</h2>
+      <p style="color:var(--muted);margin-top:7px">Login to save your progress and manage your resources.</p>
+      <input id="loginEmail" type="email" placeholder="Email address">
+      <input id="loginPassword" type="password" placeholder="Password">
+      <button id="loginSubmit" class="btn primary" style="width:100%;margin-top:15px" onclick="login()">Login</button>
+      <p style="font-size:12px;color:var(--muted);margin-top:15px">New here? <span class="switch" onclick="showSignup()">Create an account</span></p>
+    </div>
+
+    <div id="authSignup" class="hidden">
+      <div class="eyebrow">✨ FREE STUDENT ACCOUNT</div>
+      <h2 style="margin-top:15px">Create your account</h2>
+      <p style="color:var(--muted);margin-top:7px">Start building your learning profile.</p>
+      <input id="signupName" type="text" placeholder="Your name">
+      <input id="signupEmail" type="email" placeholder="Email address">
+      <input id="signupPassword" type="password" placeholder="Password (minimum 6 characters)">
+      <button id="signupSubmit" class="btn primary" style="width:100%;margin-top:15px" onclick="signup()">Create account</button>
+      <p style="font-size:12px;color:var(--muted);margin-top:15px">Already have an account? <span class="switch" onclick="showLogin()">Login</span></p>
+    </div>
+    <p id="authStatus" style="margin-top:14px;font-size:12px"></p>
+  </div>
+</div>
+
+<div class="toast" id="toast"></div>
+
+<script>
+/* ============================================================
+   SHIKSHA SAHAY - CONFIGURATION
+   Replace ONLY these two values with your Supabase values.
+   Never put a Supabase SECRET/service_role key here.
+============================================================ */
+const SUPABASE_URL = "https://zfenjcrkgwhdolucnuow.supabase.co";
+const SUPABASE_KEY = "sb_publishable_r21hh0LskCM6t3Zn1m1wJg_SIMp5TtW";
+
+/* ============================================================
+   FUTURE-FRIENDLY APP CONFIG
+   Add future settings here instead of searching through the
+   whole file. This makes later upgrades easier.
+============================================================ */
+const APP_CONFIG = {
+  appName: "Shiksha Sahay",
+  points: { easy: 10, moderate: 20, hard: 30, pro: 50 },
+  maxUploadMB: 20,
+  documentBucket: "documents"
+};
+
+let supabaseClient = null;
+let currentUser = null;
+let currentLevel = "Easy";
+let currentQuestion = 0;
+let score = 0;
+
+/* Student-controlled practice batches */
+const QUESTIONS_PER_BATCH = 5;
+let currentBatch = 1;
+let questionsCompletedToday = 0;
+let questionsInCurrentBatch = 0;
+let batchActive = true;
+let feedbackRating = 0;
+
+/* Starter questions. Later these can be moved to Supabase. */
+const QUESTION_BANK = {
+  Easy: [
+    {language:"C", topic:"Basics", q:"Which header is commonly used for printf() in C?", options:["<math.h>","<stdio.h>","<string.h>","<stdlib.h>"], answer:1, explanation:"printf() is declared in <stdio.h>.", source:"C standard-library fundamentals", target:35},
+    {language:"C", topic:"Pointers", q:"What does a pointer store?", options:["A function name only","A memory address","Only an integer","A compiler error"], answer:1, explanation:"A pointer stores the address of an object or function, depending on its type.", source:"C fundamentals", target:45},
+    {language:"C++", topic:"Basics", q:"Which operator is used for scope resolution in C++?", options:["::","->","=>","##"], answer:0, explanation:"The scope-resolution operator is ::.", source:"C++ fundamentals", target:30},
+    {language:"C++", topic:"OOP", q:"Which OOP feature allows the same interface to have different implementations?", options:["Encapsulation","Polymorphism","Compilation","Iteration"], answer:1, explanation:"Polymorphism lets one interface represent different implementations.", source:"C++ OOP fundamentals", target:45},
+    {language:"Java", topic:"Basics", q:"Which component executes Java bytecode?", options:["JVM","JDK","JAR","Javadoc"], answer:0, explanation:"The JVM executes Java bytecode. The JDK contains development tools and the runtime components.", source:"Oracle Java Tutorials", target:45},
+    {language:"Java", topic:"OOP", q:"Which keyword is used to create an object in Java?", options:["class","new","object","make"], answer:1, explanation:"The new keyword creates an object and invokes its constructor.", source:"Java language basics", target:30},
+    {language:"Python", topic:"Basics", q:"Which data type stores an ordered, mutable collection in Python?", options:["tuple","list","set","frozenset"], answer:1, explanation:"A list is ordered and mutable.", source:"Python Tutorial", target:35},
+    {language:"Python", topic:"Syntax", q:"What is used to define a block of code in Python?", options:["Braces","Indentation","Semicolon only","Parentheses"], answer:1, explanation:"Indentation is syntactically significant in Python.", source:"Python Tutorial", target:30},
+    {language:"JavaScript", topic:"Basics", q:"Which keyword declares a block-scoped variable that can be reassigned?", options:["var","let","const","define"], answer:1, explanation:"let creates a block-scoped binding that can be reassigned.", source:"JavaScript language fundamentals", target:35},
+    {language:"JavaScript", topic:"Web", q:"Which method selects an element by its id in the DOM?", options:["getElementById()","queryId()","selectId()","findId()"], answer:0, explanation:"document.getElementById() returns the element with the specified id.", source:"Web API fundamentals", target:30},
+
+    {language:"C", topic:"Arrays", q:"Array indexing in C starts at:", options:["0","1","-1","Depends on compiler"], answer:0, explanation:"The first element of an array has index 0.", source:"C language fundamentals", target:20},
+    {language:"C++", topic:"STL", q:"Which STL container stores elements in contiguous memory and supports random access?", options:["vector","list","set","map"], answer:0, explanation:"std::vector provides contiguous storage and constant-time random access.", source:"C++ standard library fundamentals", target:35},
+    {language:"Java", topic:"Strings", q:"Which type is immutable in Java?", options:["String","StringBuilder","ArrayList","HashMap"], answer:0, explanation:"String objects are immutable; operations create new String values.", source:"Oracle Java language fundamentals", target:35},
+    {language:"Python", topic:"Functions", q:"Which keyword defines a function in Python?", options:["func","def","function","lambda"], answer:1, explanation:"def starts a normal function definition.", source:"Python Tutorial", target:20},
+    {language:"JavaScript", topic:"Types", q:"Which value represents an explicitly empty or absent value in JavaScript?", options:["undefined only","null","empty","void"], answer:1, explanation:"null is commonly used to represent an intentional absence of an object value.", source:"JavaScript fundamentals", target:35}
+  ],
+  Moderate: [
+    {language:"C", topic:"Memory", q:"Which function allocates a block of dynamic memory in C?", options:["malloc()","printf()","strlen()","scanf()"], answer:0, explanation:"malloc() allocates a requested number of bytes and returns a pointer to the allocated memory.", source:"C standard library", target:60},
+    {language:"C", topic:"Pointers", q:"What does *p mean when p is a valid pointer to an int?", options:["Address of p","Value stored at the address held by p","Size of p","A new pointer"], answer:1, explanation:"The unary * operator dereferences p and accesses the pointed-to object.", source:"C pointers fundamentals", target:50},
+    {language:"C++", topic:"References", q:"Which statement best describes a C++ reference?", options:["It must be initialized and acts as an alias","It must always be null","It can be rebound freely","It is always a pointer object"], answer:0, explanation:"A reference is an alias that is initialized when declared and cannot be reseated.", source:"C++ language fundamentals", target:55},
+    {language:"C++", topic:"OOP", q:"Why is a virtual destructor useful in a polymorphic base class?", options:["It speeds compilation","It allows correct destruction through a base pointer","It prevents inheritance","It creates templates"], answer:1, explanation:"A virtual destructor allows the derived destructor to run when deleting through a base-class pointer.", source:"C++ OOP and object lifetime", target:70},
+    {language:"Java", topic:"OOP", q:"What is the main purpose of encapsulation?", options:["Expose every field publicly","Bundle data and behavior while controlling access","Avoid all classes","Disable inheritance"], answer:1, explanation:"Encapsulation combines state and behavior and controls access to implementation details.", source:"Oracle Java OOP concepts", target:50},
+    {language:"Java", topic:"Collections", q:"Which collection does not allow duplicate elements?", options:["ArrayList","HashSet","LinkedList","Vector"], answer:1, explanation:"Set implementations model collections of unique elements.", source:"Java Collections Framework", target:45},
+    {language:"Python", topic:"Collections", q:"Which structure is generally used for key-value pairs?", options:["list","tuple","dict","set"], answer:2, explanation:"A dict maps keys to values.", source:"Python Tutorial", target:35},
+    {language:"Python", topic:"Exceptions", q:"Which block handles an exception after try?", options:["catch","except","handle","error"], answer:1, explanation:"Python uses except clauses to handle exceptions raised in a try block.", source:"Python Tutorial", target:40},
+    {language:"JavaScript", topic:"Functions", q:"What is a closure?", options:["A loop that stops","A function retaining access to its lexical environment","A CSS rule","A browser tab"], answer:1, explanation:"A closure is a function together with access to its surrounding lexical environment.", source:"JavaScript language concepts", target:70},
+    {language:"JavaScript", topic:"Async", q:"What does Promise.then() primarily register?", options:["A CSS selector","A callback for a fulfilled promise","A new variable type","A DOM element"], answer:1, explanation:"then() registers fulfillment/rejection handlers and returns another promise.", source:"JavaScript Promise fundamentals", target:55},
+    {language:"C++", topic:"STL", q:"Average-case lookup in an unordered_map is typically:", options:["O(1)","O(n log n)","O(n²)","O(log log n)"], answer:0, explanation:"Hash-table lookup is typically O(1) on average, although worst-case behavior can be linear.", source:"C++ standard library complexity", target:55},
+    {language:"C", topic:"Strings", q:"What marks the end of a C string?", options:["EOF","A null character '\\0'","A newline always","A space"], answer:1, explanation:"C strings are arrays of characters terminated by a null character.", source:"C string fundamentals", target:40},
+    {language:"Java", topic:"Equality", q:"For Java objects, what is the usual purpose of equals()?", options:["Compare object contents according to its equality contract","Compare only memory addresses","Compile a class","Create a thread"], answer:0, explanation:"equals() is used for logical equality when a class implements an appropriate equality contract.", source:"Java Object/equals fundamentals", target:60},
+    {language:"Python", topic:"Comprehensions", q:"What does [x*x for x in range(3)] produce?", options:["[1,2,3]","[0,1,4]","[0,1,2]","[1,4,9]"], answer:1, explanation:"range(3) produces 0, 1, 2, and each value is squared.", source:"Python Tutorial", target:35},
+    {language:"JavaScript", topic:"Equality", q:"Which operator performs strict equality without type coercion?", options:["==","=","===","!==="], answer:2, explanation:"=== compares value and type without the coercion used by ==.", source:"JavaScript operators", target:40}
+  ],
+  Hard: [
+    {language:"C", topic:"Pointers", q:"What is a pointer-to-pointer written as for an int pointer p?", options:["int &p","int **p","int &&p","int *&p only"], answer:1, explanation:"int **p declares p as a pointer to a pointer to int.", source:"C pointer fundamentals", target:75},
+    {language:"C", topic:"Memory", q:"Which issue occurs when allocated memory is no longer reachable and was never freed?", options:["Memory leak","Syntax error","Compile-time polymorphism","Stack overflow always"], answer:0, explanation:"A memory leak occurs when dynamically allocated memory remains allocated without a usable reference to release it.", source:"C dynamic memory management", target:60},
+    {language:"C++", topic:"Memory", q:"What problem does RAII primarily solve?", options:["Resource lifetime management","HTML rendering","Sorting only","Preprocessor expansion"], answer:0, explanation:"RAII ties resource ownership to object lifetime so cleanup occurs automatically.", source:"C++ object lifetime", target:70},
+    {language:"C++", topic:"Move", q:"Move semantics mainly allow:", options:["Copying everything twice","Transferring resources from temporary/expiring objects","Turning C++ into C","Disabling destructors"], answer:1, explanation:"Move operations can transfer ownership of resources instead of performing expensive deep copies.", source:"Modern C++ move semantics", target:80},
+    {language:"Java", topic:"Hashing", q:"If a Java class overrides equals(), what should generally also be consistent with it?", options:["hashCode()","toString() only","main()","finalize()"], answer:0, explanation:"Objects equal according to equals() must return the same hashCode() for hash-based collections to behave correctly.", source:"Java Object contract", target:70},
+    {language:"Java", topic:"Exceptions", q:"Which is generally true of checked exceptions in Java?", options:["They must be handled or declared","They can never be caught","They are always runtime errors","They are only syntax errors"], answer:0, explanation:"Checked exceptions are subject to compile-time checking and generally must be caught or declared.", source:"Oracle Java exception tutorial", target:65},
+    {language:"Python", topic:"Iterators", q:"What does yield do inside a Python function?", options:["Turns it into a generator function","Deletes the function","Forces recursion","Creates a class"], answer:0, explanation:"yield produces values lazily and turns the function into a generator.", source:"Python language reference/tutorial", target:65},
+    {language:"Python", topic:"Mutability", q:"Which of these is immutable?", options:["list","dict","set","tuple"], answer:3, explanation:"Tuples are immutable sequences, although they can contain references to mutable objects.", source:"Python data model", target:55},
+    {language:"JavaScript", topic:"Async", q:"An async function always returns:", options:["A Promise","A number","A DOM node","undefined only"], answer:0, explanation:"An async function returns a Promise that settles with its return value or thrown error.", source:"JavaScript async functions", target:60},
+    {language:"JavaScript", topic:"Scope", q:"Which declaration is block-scoped and cannot be reassigned?", options:["var","let","const","function only"], answer:2, explanation:"const creates a block-scoped binding that cannot be reassigned.", source:"JavaScript declarations", target:45}
+  ],
+  Pro: [
+    {language:"C", topic:"Undefined behavior", q:"Why should a program avoid dereferencing an invalid pointer?", options:["It can cause undefined behavior","It always prints zero","It converts the pointer to a string","It makes code faster"], answer:0, explanation:"Dereferencing an invalid pointer has undefined behavior; the program cannot rely on a particular result.", source:"C language behavior", target:90},
+    {language:"C++", topic:"Object lifetime", q:"What is the core idea behind the Rule of Five?", options:["A class may need explicit copy/move/destructor operations when managing resources","Every class needs five constructors","Five objects must exist","Use five pointers"], answer:0, explanation:"Resource-managing types may need destructor, copy constructor, copy assignment, move constructor and move assignment.", source:"Modern C++ resource management", target:100},
+    {language:"C++", topic:"Polymorphism", q:"What is a common purpose of a virtual function?", options:["Enable dynamic dispatch through a polymorphic interface","Prevent all overriding","Allocate arrays automatically","Replace templates"], answer:0, explanation:"Virtual functions allow a call through a base interface to dispatch to an overriding derived implementation.", source:"C++ virtual functions", target:85},
+    {language:"Java", topic:"Concurrency", q:"What problem can synchronization help prevent when multiple threads update shared mutable state?", options:["Data races","Syntax highlighting","Compilation of imports","String literals"], answer:0, explanation:"Synchronization can coordinate access to shared state and prevent data races when used correctly.", source:"Java concurrency fundamentals", target:90},
+    {language:"Java", topic:"Collections", q:"Why must a key used in a HashMap have a stable hash/equality relationship while stored?", options:["Hash-based lookup relies on hashCode and equals consistency","Otherwise Java cannot compile any class","HashMap stores only integers","It affects only printing"], answer:0, explanation:"If a key changes in a way that changes its hash/equality while stored, lookup may fail because it is in the wrong bucket.", source:"Java Collections/hashCode contract", target:95},
+    {language:"Python", topic:"Decorators", q:"A decorator is primarily used to:", options:["Modify or wrap callable behavior","Create hardware drivers automatically","Change Python into C","Disable functions"], answer:0, explanation:"Decorators wrap or transform callable behavior, commonly using higher-order functions.", source:"Python functions/decorators", target:90},
+    {language:"Python", topic:"Generators", q:"Why can a generator be more memory-efficient than building a large list?", options:["It can produce values lazily","It stores every value twice","It disables iteration","It always runs in parallel"], answer:0, explanation:"Generators yield values on demand instead of materializing the entire sequence at once.", source:"Python generator fundamentals", target:80},
+    {language:"JavaScript", topic:"Event loop", q:"What is the event loop mainly responsible for in JavaScript environments?", options:["Coordinating execution of queued asynchronous callbacks/tasks with the call stack","Compiling CSS","Creating HTML tags","Replacing variables"], answer:0, explanation:"The event loop coordinates when queued tasks/callbacks can run relative to the call stack and runtime queues.", source:"JavaScript runtime concepts", target:100},
+    {language:"JavaScript", topic:"Closures", q:"Why can a closure retain access to a variable after the outer function has returned?", options:["The function retains access to its lexical environment","The browser copies the whole program","Variables become global automatically","The variable becomes a CSS property"], answer:0, explanation:"The closure keeps a reference to the lexical environment needed by the function.", source:"JavaScript closures", target:85}
+  ]
+};
+
+
+/* ---------------- EXTENSIBLE SKILL HUB ----------------
+   New skills can be added here later without redesigning the UI.
+-------------------------------------------------------- */
+const SKILLS = {
+  "C": {
+    category:"Programming",
+    intro:"Learn C from fundamentals to problem solving.",
+    learn:"Start with variables → data types → operators → conditions → loops → arrays → functions → pointers.",
+    history:"Learn the history and evolution of C as an optional topic.",
+    practice:"Practice concept questions, debugging questions and small programming problems.",
+    output:"Predict the output of small C programs and understand why the output occurs.",
+    real:"Connect C concepts to embedded systems, operating systems and low-level programming."
+  },
+  "C++": {
+    category:"Programming",
+    intro:"Build C++ fundamentals and gradually move toward OOP and interview problems.",
+    learn:"Start with syntax → variables → loops → arrays → strings → functions → OOP → STL.",
+    history:"Learn how C++ evolved from C and why it became widely used.",
+    practice:"Practice basic, moderate and advanced C++ questions.",
+    output:"Predict output from loops, functions, classes, constructors and STL examples.",
+    real:"Understand where C++ is used in software, embedded systems, games and performance-sensitive applications."
+  },
+  "Java": {
+    category:"Programming",
+    intro:"Learn Java fundamentals and object-oriented programming.",
+    learn:"Start with syntax → variables → conditions → loops → methods → classes → OOP → collections.",
+    history:"Explore the background and evolution of Java.",
+    practice:"Practice Core Java and interview-style questions.",
+    output:"Predict output involving methods, classes, inheritance and exceptions.",
+    real:"Connect Java to enterprise software, Android history and backend development."
+  },
+  "Python": {
+    category:"Programming",
+    intro:"Learn Python with simple examples and practical problem solving.",
+    learn:"Start with variables → conditions → loops → lists → dictionaries → functions → modules.",
+    history:"Explore Python's history and design philosophy as optional learning.",
+    practice:"Practice beginner to advanced Python questions.",
+    output:"Predict output and trace short Python programs.",
+    real:"Connect Python to automation, data analysis, AI and scripting."
+  },
+  "JavaScript": {
+    category:"Web Programming",
+    intro:"Learn JavaScript as the behavior layer of modern websites.",
+    learn:"Start with variables → conditions → functions → arrays → objects → DOM → events.",
+    history:"Learn how JavaScript became a core web technology.",
+    practice:"Practice browser and JavaScript fundamentals.",
+    output:"Predict output from functions, arrays, scope and events.",
+    real:"Connect JavaScript to websites, web apps and interactive interfaces."
+  },
+  "HTML": {
+    category:"Web",
+    intro:"Learn how webpages are structured.",
+    learn:"Start with document structure → headings → links → images → forms → semantic elements.",
+    history:"Learn the evolution of HTML and the web.",
+    practice:"Identify correct HTML structures and elements.",
+    output:"Understand what a browser will render from simple HTML.",
+    real:"Build the structure of real websites."
+  },
+  "CSS": {
+    category:"Web",
+    intro:"Learn how to design responsive and attractive webpages.",
+    learn:"Start with selectors → box model → colors → flexbox → grid → responsive design → animations.",
+    history:"Explore how CSS evolved alongside the web.",
+    practice:"Practice selectors, layouts and responsive design questions.",
+    output:"Predict how CSS rules affect an element.",
+    real:"Use CSS to build dashboards, portfolios and student applications."
+  },
+  "AutoCAD": {
+    category:"Technical Tools",
+    intro:"Learn technical drafting step-by-step with practical drawing concepts.",
+    learn:"Start with interface → coordinates → line → circle → trim → offset → layers → dimensions → layouts.",
+    history:"Learn the history of computer-aided design and AutoCAD.",
+    practice:"Practice command recognition, drawing concepts and workflow questions.",
+    output:"Read a small command sequence and predict what drawing operation it performs.",
+    real:"Connect commands to mechanical, civil, electrical and architectural drafting tasks."
+  },
+  "MATLAB": {
+    category:"Technical Tools",
+    intro:"Learn MATLAB for numerical and engineering work.",
+    learn:"Start with variables → vectors → matrices → scripts → functions → plots.",
+    history:"Learn the development of MATLAB as a technical computing environment.",
+    practice:"Practice commands, matrices and engineering fundamentals.",
+    output:"Predict results of small MATLAB expressions.",
+    real:"Connect MATLAB to engineering calculations, signals and data visualization."
+  },
+  "Arduino": {
+    category:"Technical Tools",
+    intro:"Learn microcontroller basics through small practical projects.",
+    learn:"Start with board concepts → digital I/O → analog input → sensors → serial communication.",
+    history:"Learn the background of Arduino and open hardware.",
+    practice:"Practice components, code structure and troubleshooting.",
+    output:"Predict what a small Arduino sketch will do.",
+    real:"Build sensors, indicators, automation and beginner embedded projects."
+  },
+  "TINA-TI": {
+    category:"Technical Tools",
+    intro:"Learn circuit simulation and measurement concepts.",
+    learn:"Start with components → sources → wiring → simulation → measurements → analysis.",
+    history:"Explore the role of circuit simulation in electronics education and design.",
+    practice:"Practice circuit and simulation questions.",
+    output:"Predict basic circuit behavior before running a simulation.",
+    real:"Use simulation to understand amplifiers, filters and electronic circuits."
+  },
+  "SQL": {
+    category:"Data",
+    intro:"Learn database fundamentals with practical queries.",
+    learn:"Start with tables → SELECT → WHERE → ORDER BY → GROUP BY → JOIN → basic database design.",
+    history:"Learn how relational databases and SQL developed.",
+    practice:"Practice query-writing and database concepts.",
+    output:"Predict the result of simple SQL queries.",
+    real:"Connect SQL to student portals, websites, analytics and business applications."
+  }
+};
+
+let activeSkill = null;
+let activeSkillTab = "learn";
+
+function openSkill(name){
+  activeSkill=name;
+  activeSkillTab="learn";
+  const data=SKILLS[name];
+  if(!data)return;
+  document.getElementById("skillTitle").textContent=name;
+  document.getElementById("skillCategory").textContent=data.category.toUpperCase();
+  document.getElementById("skillIntro").textContent=data.intro;
+  document.getElementById("skillModal").classList.add("show");
+  renderSkillContent();
+}
+function closeSkill(){document.getElementById("skillModal").classList.remove("show");}
+function skillTab(tab,button){
+  activeSkillTab=tab;
+  document.querySelectorAll("#skillModal .level").forEach(x=>x.classList.remove("active"));
+  button.classList.add("active");
+  renderSkillContent();
+}
+function renderSkillContent(){
+  const data=SKILLS[activeSkill];
+  const labels={
+    learn:["📖 Learn this skill",data.learn],
+    history:["🕰️ Optional history",data.history],
+    practice:["❓ Practice questions",data.practice],
+    output:["💻 Output-based problems",data.output],
+    real:["🌍 Real-life connection",data.real]
+  };
+  const item=labels[activeSkillTab]||labels.learn;
+  document.getElementById("skillContent").innerHTML=`
+    <div class="card" style="margin-top:10px">
+      <h3>${item[0]}</h3>
+      <p style="margin-top:12px">${item[1]}</p>
+      <div class="level-row" style="margin-top:20px">
+        <span class="badge">🟢 Basic</span>
+        <span class="badge">🟡 Moderate</span>
+        <span class="badge">🔴 Advanced</span>
+      </div>
+      <div class="result" style="margin-top:18px">
+        💡 <b>How learning will work:</b> concept → simple explanation → real-life example → visual/3D demonstration when appropriate → small question → practice.
+      </div>
+      <button class="btn primary" style="margin-top:15px" onclick="goToSkillPractice()">Start practice</button>
+    </div>`;
+}
+function goToSkillPractice(){
+  closeSkill();
+  go("practice");
+  toast(`${activeSkill} practice will use your selected difficulty as the learning system expands.`);
+}
+
+
+
+/* ---------------- SOURCE-BASED QUESTION + LEARNING HISTORY ---------------- */
+const HISTORY_KEY="shiksha_learning_history_v1";
+let questionStartedAt=0;
+let currentQuestionTarget=0;
+let currentQuestionMeta=null;
+let historyData=loadLearningHistory();
+
+function loadLearningHistory(){
+  try{return JSON.parse(localStorage.getItem(HISTORY_KEY)||"[]");}
+  catch(e){return [];}
+}
+function saveLearningHistory(){localStorage.setItem(HISTORY_KEY,JSON.stringify(historyData));}
+function startQuestionTimer(q){
+  questionStartedAt=Date.now();
+  currentQuestionTarget=q.target||60;
+  currentQuestionMeta=q;
+}
+function getQuestionPool(){
+  return (QUESTION_BANK[currentLevel]||[]).filter(q=>{
+    const recent=historyData.slice(-60);
+    return !recent.some(h=>h.question===q.q && h.level===currentLevel);
+  });
+}
+function pickNextQuestion(){
+  let pool=getQuestionPool();
+  if(!pool.length){
+    // Once the whole level has been exhausted, allow older questions again,
+    // but prefer the least recently seen question.
+    const seenCount={};
+    historyData.forEach(h=>{seenCount[h.question]=(seenCount[h.question]||0)+1;});
+    pool=(QUESTION_BANK[currentLevel]||[]).slice().sort((a,b)=>(seenCount[a.q]||0)-(seenCount[b.q]||0));
+  }
+  return pool[0] || (QUESTION_BANK[currentLevel]||[])[0];
+}
+function recordAttempt(q,correct,seconds){
+  historyData.push({
+    at:new Date().toISOString(),
+    question:q.q,
+    language:q.language||"General",
+    topic:q.topic||"General",
+    level:currentLevel,
+    correct,
+    seconds,
+    target:q.target||60,
+    source:q.source||"Curated fundamentals"
+  });
+  if(historyData.length>200)historyData=historyData.slice(-200);
+  saveLearningHistory();
+  renderLearningHistory();
+}
+function renderLearningHistory(){
+  const total=historyData.length;
+  const correct=historyData.filter(x=>x.correct).length;
+  const seconds=historyData.reduce((a,x)=>a+(x.seconds||0),0);
+  const topics=[...new Set(historyData.slice(-30).map(x=>`${x.language} • ${x.topic}`))].slice(-8);
+  const mistakes=historyData.filter(x=>!x.correct).slice(-8).reverse();
+  const recent=historyData.slice(-10).reverse();
+
+  const set=(id,val)=>{const e=document.getElementById(id);if(e)e.textContent=val;};
+  set("histSolved",total); set("histCorrect",correct);
+  set("histAccuracy",total?Math.round(correct/total*100)+"%":"0%");
+  set("histTime",formatTime(seconds));
+
+  const learned=document.getElementById("learnedTopics");
+  if(learned)learned.innerHTML=topics.length?topics.map(t=>`<div class="history-chip">✓ ${t}</div>`).join(""):`<p class="postmeta">Solve questions to build your learning history.</p>`;
+
+  const mistake=document.getElementById("mistakeTopics");
+  if(mistake)mistake.innerHTML=mistakes.length?mistakes.map(x=>`<div class="history-item"><b>${x.language} • ${x.topic}</b><br><span>${escapeHTML(x.question)}</span><small>Correct answer: ${escapeHTML((QUESTION_BANK[x.level]||[]).find(q=>q.q===x.question)?.options[(QUESTION_BANK[x.level]||[]).find(q=>q.q===x.question)?.answer]||"Review explanation")}</small></div>`).join(""):`<p class="postmeta">No mistakes recorded yet. Keep practicing!</p>`;
+
+  const analysis=document.getElementById("timeAnalysis");
+  if(analysis)analysis.innerHTML=recent.length?recent.slice(0,6).map(x=>{
+    const diff=x.seconds-x.target;
+    const label=diff<=0?"Faster than target":diff<=20?"Close to target":"Needs speed practice";
+    return `<div class="history-item"><b>${x.language} • ${x.topic}</b><br>Actual: ${formatTime(x.seconds)} • Target: ${formatTime(x.target)}<small>${label}</small></div>`;
+  }).join(""):`<p class="postmeta">Your actual solving time will be compared with the recommended target.</p>`;
+
+  const attempts=document.getElementById("attemptHistory");
+  if(attempts)attempts.innerHTML=recent.length?recent.map(x=>`
+    <div class="attempt-row">
+      <span>${x.correct?"✅":"❌"}</span>
+      <div><b>${x.language} • ${x.topic}</b><small>${escapeHTML(x.question)}</small></div>
+      <div class="attempt-time">${formatTime(x.seconds)} / ${formatTime(x.target)}</div>
+    </div>`).join(""):`<p class="postmeta">No attempts yet.</p>`;
+}
+function clearLearningHistory(){
+  if(!confirm("Clear your local learning history? This cannot be undone on this device."))return;
+  historyData=[]; saveLearningHistory(); renderLearningHistory(); toast("Learning history cleared.");
+}
+function formatTime(sec){
+  sec=Math.max(0,Math.round(sec||0));
+  if(sec<60)return `${sec}s`;
+  return `${Math.floor(sec/60)}m ${sec%60}s`;
+}
+function escapeHTML(str){
+  return String(str).replace(/[&<>"']/g,m=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#039;"}[m]));
+}
+
+/* ---------------- PRIVACY CENTER ---------------- */
+const PRIVACY_DEFAULTS = {
+  defaultDocPrivacy:"private",
+  profileSearch:true,
+  showActivity:false,
+  leaderboardProfile:true,
+  approveFollowers:true,
+  aiDocuments:false,
+  personalized:true
+};
+
+function loadPrivacySettings(){
+  Object.entries(PRIVACY_DEFAULTS).forEach(([key,value])=>{
+    const saved=localStorage.getItem("shiksha_privacy_"+key);
+    const actual=saved===null ? value : (saved==="true" ? true : saved==="false" ? false : saved);
+    localStorage.setItem("shiksha_privacy_"+key,String(actual));
+    const el=document.getElementById(key);
+    if(!el)return;
+    if(el.type==="checkbox")el.checked=actual===true||actual==="true";
+    else el.value=actual;
+  });
+}
+
+function savePrivacySetting(key,value){
+  localStorage.setItem("shiksha_privacy_"+key,String(value));
+  toast("Privacy setting saved.");
+}
+
+function confirmDeleteAccount(){
+  const ok=confirm(
+    "Delete your Shiksha Sahay account?\n\n"+
+    "This should permanently remove your profile and associated user data and revoke access to your private documents when the Supabase deletion workflow is connected.\n\n"+
+    "This action cannot be undone. Continue?"
+  );
+  if(!ok)return;
+
+  const typed=prompt('Type DELETE to confirm permanent account deletion:');
+  if(typed!=="DELETE"){
+    toast("Account deletion cancelled.");
+    return;
+  }
+  deleteAccount();
+}
+
+async function deleteAccount(){
+  const status=document.getElementById("privacyActionStatus");
+  if(status)status.textContent="Preparing account deletion…";
+
+  /*
+    IMPORTANT:
+    Real account deletion should be performed by a trusted backend/Edge Function
+    with the required Supabase Admin API permissions. A browser must NOT contain
+    a Supabase service-role key.
+  */
+  try{
+    if(!supabaseClient || !currentUser){
+      toast("Please sign in before deleting your account.");
+      if(status)status.textContent="Please sign in first.";
+      return;
+    }
+
+    // Sign out locally now so the current session cannot continue.
+    await supabaseClient.auth.signOut();
+    currentUser=null;
+    if(status)status.textContent="Signed out. Permanent deletion needs the secure Supabase backend workflow.";
+    toast("You have been signed out. Connect the secure deletion function to permanently remove account data.");
+    updateAuthUI();
+  }catch(err){
+    console.error(err);
+    if(status)status.textContent="Could not complete the sign-out.";
+    toast("Something went wrong. Please try again.");
+  }
+}
+
+async function logoutAllDevices(){
+  try{
+    if(!supabaseClient || !currentUser){
+      toast("Please sign in first.");
+      return;
+    }
+    await supabaseClient.auth.signOut({scope:"global"});
+    currentUser=null;
+    updateAuthUI();
+    toast("Signed out from active sessions.");
+  }catch(err){
+    console.error(err);
+    toast("Could not sign out from all sessions.");
+  }
+}
+
+function deleteMyDocuments(){
+  const ok=confirm(
+    "Delete all documents uploaded by your account?\n\n"+
+    "This will be connected to Supabase Storage so that the files and their database records are removed according to the storage policy."
+  );
+  if(!ok)return;
+  const status=document.getElementById("privacyActionStatus");
+  if(status)status.textContent="Document deletion is ready for the secure Supabase Storage deletion workflow.";
+  toast("Document deletion workflow needs the Supabase Storage backend connection.");
+}
+
+function requestDataCopy(){
+  const status=document.getElementById("privacyActionStatus");
+  if(status)status.textContent="Data export will be connected to Supabase so your account information and eligible content can be exported.";
+  toast("Data export request recorded for the next backend stage.");
+}
+
+function openPrivacyPolicy(){
+  alert(
+    "Shiksha Sahay Privacy Principles\\n\\n"+
+    "1. Collect only information needed for the service.\\n"+
+    "2. Keep private documents private using backend access rules.\\n"+
+    "3. Give students control over profile and document visibility.\\n"+
+    "4. Do not send documents to AI without an explicit permission mechanism.\\n"+
+    "5. Provide account deletion and data-management controls.\\n"+
+    "6. Explain important data uses clearly."
+  );
+}
+
+/* ---------------- BASIC UI ---------------- */
+function go(id){ document.getElementById(id)?.scrollIntoView({behavior:"smooth"}); }
+function toast(message){
+  const el=document.getElementById("toast");
+  el.textContent=message;el.classList.add("show");
+  setTimeout(()=>el.classList.remove("show"),3200);
+  burst();
+}
+function burst(){
+  const icons=["✨","⭐","🔥","💫","📚","💡","❄️"];
+  for(let i=0;i<7;i++){
+    const e=document.createElement("div");e.className="fx";e.textContent=icons[Math.floor(Math.random()*icons.length)];
+    e.style.left=(50+Math.random()*15-7)+"%";e.style.top=(50+Math.random()*15-7)+"%";
+    e.style.setProperty("--x",(Math.random()*260-130)+"px");e.style.setProperty("--y",(Math.random()*260-130)+"px");
+    document.body.appendChild(e);setTimeout(()=>e.remove(),950);
+  }
+}
+function filterCards(){
+  const q=document.getElementById("search").value.toLowerCase().trim();
+  document.querySelectorAll(".searchable > *").forEach(card=>{
+    card.style.display=(!q || card.innerText.toLowerCase().includes(q))?"":"none";
+  });
+}
+
+/* ---------------- AUTH ---------------- */
+function configured(){
+  return SUPABASE_URL.startsWith("http") && !SUPABASE_URL.includes("PASTE_") &&
+         SUPABASE_KEY.startsWith("sb_") && !SUPABASE_KEY.includes("PASTE_");
+}
+function openAuth(mode="login"){
+  document.getElementById("authModal").classList.add("show");
+  mode==="signup" ? showSignup() : showLogin();
+}
+function closeAuth(){document.getElementById("authModal").classList.remove("show");}
+function showLogin(){
+  document.getElementById("authLogin").classList.remove("hidden");
+  document.getElementById("authSignup").classList.add("hidden");
+  document.getElementById("authStatus").textContent="";
+}
+function showSignup(){
+  document.getElementById("authSignup").classList.remove("hidden");
+  document.getElementById("authLogin").classList.add("hidden");
+  document.getElementById("authStatus").textContent="";
+}
+function authMessage(message, good=false){
+  const el=document.getElementById("authStatus");
+  el.textContent=message;el.style.color=good?"var(--brand)":"var(--danger)";
+}
+async function signup(){
+  if(!configured()){authMessage("First add your Supabase Project URL and Publishable key in the CONFIG section.");return;}
+  const name=document.getElementById("signupName").value.trim();
+  const email=document.getElementById("signupEmail").value.trim();
+  const password=document.getElementById("signupPassword").value;
+  if(!name || !email || password.length<6){authMessage("Enter your name, a valid email and a password of at least 6 characters.");return;}
+  const btn=document.getElementById("signupSubmit");btn.disabled=true;btn.textContent="Creating...";
+  const {data,error}=await supabaseClient.auth.signUp({
+    email,password,
+    options:{data:{full_name:name}}
+  });
+  btn.disabled=false;btn.textContent="Create account";
+  if(error){authMessage(error.message);return;}
+  if(data.session){
+    authMessage("Account created and you are logged in.",true);
+    setTimeout(closeAuth,700);
+  }else{
+    authMessage("Account created. Check your email to confirm your account, then log in.",true);
+  }
+}
+async function login(){
+  if(!configured()){authMessage("First add your Supabase Project URL and Publishable key in the CONFIG section.");return;}
+  const email=document.getElementById("loginEmail").value.trim();
+  const password=document.getElementById("loginPassword").value;
+  if(!email || !password){authMessage("Enter your email and password.");return;}
+  const btn=document.getElementById("loginSubmit");btn.disabled=true;btn.textContent="Logging in...";
+  const {data,error}=await supabaseClient.auth.signInWithPassword({email,password});
+  btn.disabled=false;btn.textContent="Login";
+  if(error){authMessage(error.message);return;}
+  authMessage("Login successful!",true);burst();setTimeout(closeAuth,600);
+}
+async function logout(){
+  if(!supabaseClient)return;
+  const {error}=await supabaseClient.auth.signOut();
+  if(error){toast(error.message);return;}
+  toast("Logged out successfully.");
+}
+function updateAuthUI(){
+  const logged=!!currentUser;
+  document.getElementById("loginBtn").classList.toggle("hidden",logged);
+  document.getElementById("signupBtn").classList.toggle("hidden",logged);
+  document.getElementById("userPill").style.display=logged?"flex":"none";
+  if(logged){
+    const name=currentUser.user_metadata?.full_name || currentUser.email?.split("@")[0] || "Student";
+    document.getElementById("userName").textContent=name;
+    document.getElementById("userAvatar").textContent=name.charAt(0).toUpperCase();
+  }
+}
+
+/* ---------------- PRACTICE ---------------- */
+function setLevel(level,button){
+  currentLevel=level;currentQuestion=0;
+  document.querySelectorAll(".level").forEach(x=>x.classList.remove("active"));
+  button.classList.add("active");
+  loadPrivacySettings();
+  renderQuestion();
+}
+function updatePracticeStats(){
+  document.getElementById("todayQuestions").textContent=questionsCompletedToday;
+  document.getElementById("batchQuestions").textContent=questionsInCurrentBatch+"/"+QUESTIONS_PER_BATCH;
+  document.getElementById("batchInfo").textContent=`Batch ${currentBatch} • ${QUESTIONS_PER_BATCH} questions`;
+}
+
+function renderQuestion(){
+  const q=pickNextQuestion();
+  if(!q){return;}
+  currentQuestionMeta=q;
+  document.getElementById("moreQuestionsBox").classList.add("hidden");
+  document.getElementById("questionArea").innerHTML=`
+    <div class="postmeta">${q.language} • ${q.topic} • ${currentLevel} • Question ${questionsInCurrentBatch+1} of ${QUESTIONS_PER_BATCH}</div>
+    <div class="question">${q.q}</div>
+    <div class="options">${q.options.map((o,i)=>`<button class="option" onclick="answerQuestion(${i})">${String.fromCharCode(65+i)}) ${o}</button>`).join("")}</div>
+    <div class="question-meta">⏱ Recommended target: about ${q.target}s • Source/topic basis: ${q.source}</div>
+    <div id="answerResult"></div>`;
+  startQuestionTimer(q);
+  updatePracticeStats();
+}
+
+function answerQuestion(choice){
+  if(!batchActive || !currentQuestionMeta)return;
+  const q=currentQuestionMeta;
+  const seconds=Math.max(1,Math.round((Date.now()-questionStartedAt)/1000));
+  const correct=choice===q.answer;
+  const result=document.getElementById("answerResult");
+  const options=document.querySelectorAll(".option");
+  options.forEach(x=>x.disabled=true);
+
+  questionsCompletedToday++;
+  questionsInCurrentBatch++;
+  recordAttempt(q,correct,seconds);
+
+  if(correct){
+    const pts=APP_CONFIG.points[currentLevel.toLowerCase()]||10;
+    score+=pts;
+    document.getElementById("score").textContent=score;
+    result.innerHTML=`<div class="result">🎉 Correct! +${pts} points<br><small>${q.explanation}</small><br><small>⏱ You: ${formatTime(seconds)} • Target: ${formatTime(q.target)}</small></div>`;
+    burst();
+  }else{
+    result.innerHTML=`<div class="result" style="color:var(--danger);border-color:#ff6b7a44;background:#ff6b7a12">❌ Not quite.<br><small>${q.explanation}</small><br><small>⏱ You: ${formatTime(seconds)} • Target: ${formatTime(q.target)}</small></div>`;
+  }
+
+  currentQuestion++;
+  updatePracticeStats();
+
+  setTimeout(()=>{
+    if(questionsInCurrentBatch >= QUESTIONS_PER_BATCH){
+      showMoreQuestionsChoice();
+    }else{
+      renderQuestion();
+    }
+  },1700);
+}
+
+function showMoreQuestionsChoice(){
+  document.getElementById("questionArea").innerHTML=`
+    <div class="result">
+      🎉 Great work! You completed all ${QUESTIONS_PER_BATCH} questions in this batch.
+      <br><small>You decide whether to continue. There is no forced limit.</small>
+    </div>`;
+  document.getElementById("moreQuestionsBox").classList.remove("hidden");
+  updatePracticeStats();
+}
+
+function addMoreQuestions(){
+  currentBatch++;
+  questionsInCurrentBatch=0;
+  batchActive=true;
+  document.getElementById("moreQuestionsBox").classList.add("hidden");
+  document.getElementById("questionArea").innerHTML="";
+  toast(`Batch ${currentBatch} started — 5 more questions!`);
+  renderQuestion();
+}
+
+function finishPractice(){
+  batchActive=false;
+  document.getElementById("moreQuestionsBox").classList.add("hidden");
+  document.getElementById("questionArea").innerHTML=`
+    <div class="result">
+      🌱 Practice session finished.
+      <br><small>You completed ${questionsCompletedToday} question${questionsCompletedToday===1?"":"s"} today and earned ${score} points.</small>
+      <br><br><button class="btn primary" onclick="startNewBatch()">Practice 5 more</button>
+    </div>`;
+}
+
+function startNewBatch(){
+  currentBatch++;
+  questionsInCurrentBatch=0;
+  batchActive=true;
+  renderQuestion();
+  toast("Your next 5-question batch is ready.");
+}
+
+function setLevel(level,button){
+  currentLevel=level;
+  currentQuestion=0;
+  questionsInCurrentBatch=0;
+  currentBatch=1;
+  batchActive=true;
+  document.querySelectorAll(".level").forEach(x=>x.classList.remove("active"));
+  button.classList.add("active");
+  document.getElementById("moreQuestionsBox").classList.add("hidden");
+  renderQuestion();
+}
+
+/* ---------------- FEEDBACK ---------------- */
+function setFeedbackRating(rating,button){
+  feedbackRating=rating;
+  document.querySelectorAll("#ratingButtons .level").forEach(x=>x.classList.remove("active"));
+  button.classList.add("active");
+}
+
+async function submitFeedback(){
+  const rating=feedbackRating;
+  const liked=document.getElementById("feedbackLike").value;
+  const feature=document.getElementById("feedbackFeature").value.trim();
+  const improve=document.getElementById("feedbackImprove").value.trim();
+  const other=document.getElementById("feedbackOther").value.trim();
+  const status=document.getElementById("feedbackStatus");
+
+  if(!rating || !liked || !feature && !improve && !other){
+    status.textContent="Please give a rating, choose what you like, and write at least one suggestion.";
+    status.style.color="var(--danger)";
+    return;
+  }
+
+  /* If a future feedback table is added to Supabase, this function can
+     save the same fields there without changing the feedback UI. */
+  const feedback={
+    rating,
+    liked,
+    requested_feature:feature,
+    improvement:improve,
+    other_suggestion:other,
+    user_id:currentUser?.id||null,
+    created_at:new Date().toISOString()
+  };
+
+  console.log("Shiksha Sahay feedback:",feedback);
+
+  status.textContent="Thank you! Your feedback has been captured. Permanent Supabase feedback storage will be connected in the next backend stage.";
+  status.style.color="var(--brand)";
+  toast("Thank you for helping improve Shiksha Sahay! 💚");
+
+  document.getElementById("feedbackFeature").value="";
+  document.getElementById("feedbackImprove").value="";
+  document.getElementById("feedbackOther").value="";
+}
+
+/* ---------------- UPLOAD PLACEHOLDER ---------------- */
+function showFileName(){
+  const f=document.getElementById("file").files[0];
+  document.getElementById("fileLabel").textContent=f?f.name:"Click to choose a document";
+}
+async function uploadDocument(){
+  if(!currentUser){openAuth("login");toast("Please log in before uploading.");return;}
+  if(!supabaseClient){toast("Supabase is not connected yet.");return;}
+  const f=document.getElementById("file").files[0];
+  if(!f){toast("Please select a document first.");return;}
+  if(f.size>APP_CONFIG.maxUploadMB*1024*1024){toast(`File must be smaller than ${APP_CONFIG.maxUploadMB} MB.`);return;}
+  const visibility=document.querySelector('input[name="visibility"]:checked')?.value||"private";
+  const status=document.getElementById("uploadStatus");
+  status.textContent="Upload system is ready for the next database/storage stage.";
+  toast("Your account is connected. Document storage will be activated next.");
+}
+
+/* ---------------- MINI LOCAL ASSISTANT ---------------- */
+function sendChat(){
+  const input=document.getElementById("chatInput"),text=input.value.trim();
+  if(!text)return;
+  addChat(text,"me");input.value="";
+  setTimeout(()=>addChat(localReply(text),"bot"),350);
+}
+function addChat(text,type){
+  const chat=document.getElementById("chat");
+  const d=document.createElement("div");d.className="msg "+type;d.textContent=text;
+  chat.appendChild(d);chat.scrollTop=chat.scrollHeight;
+}
+function localReply(text){
+  const t=text.toLowerCase();
+  if(t.includes("java"))return "Try the Programming section → Java. Start with variables, loops, methods and OOP.";
+  if(t.includes("c++")||t.includes("cpp"))return "Try C++ basics first: variables → loops → arrays → functions → OOP → STL.";
+  if(t.includes("python"))return "For Python, start with variables, conditions, loops, lists, dictionaries and functions.";
+  if(t.includes("scholar"))return "Open Scholarships. We will expand it with eligibility, documents, deadlines and official links.";
+  if(t.includes("upload"))return "Open Student Documents and choose a file. Login is required before uploading.";
+  if(t.includes("interview"))return "Open Interview Hub. You can prepare for jobs, scholarships, internships and communication.";
+  if(t.includes("english"))return "Open Communication Skills and practice speaking, interview English and professional emails.";
+  return "I can currently guide you around Shiksha Sahay. A full AI tutor can be connected later.";
+}
+
+/* ---------------- STUDY RESOURCE LIBRARY ---------------- */
+function openResourceLibrary(){
+  const panel=document.getElementById("resourceLibrary");
+  panel.style.display="block";
+  panel.scrollIntoView({behavior:"smooth",block:"start"});
+  loadStudyResources();
+}
+
+async function loadStudyResources(){
+  const list=document.getElementById("resourceList");
+  if(!list)return;
+  if(!supabaseClient){
+    list.innerHTML='<article class="card"><p>Study library is not connected. Please refresh the page and try again.</p></article>';
+    return;
+  }
+  list.innerHTML='<article class="card"><p>Loading study resources…</p></article>';
+  const {data:resources,error}=await supabaseClient
+    .from("resources")
+    .select("id,title,description,category,subject,topic,difficulty,file_name,file_path,file_type")
+    .order("created_at",{ascending:false});
+  if(error){
+    console.error("Could not load resources:",error);
+    list.innerHTML='<article class="card"><h3>Could not load PDFs</h3><p>Please check the resources table permissions in Supabase.</p></article>';
+    return;
+  }
+  if(!resources || resources.length===0){
+    list.innerHTML='<article class="card"><h3>No PDFs yet</h3><p>Study materials published by the website owner will appear here.</p></article>';
+    return;
+  }
+  list.innerHTML="";
+  for(const resource of resources){
+    const storedPath=String(resource.file_path||"").trim();
+    const looksLikeUrl=/^https?:\/\//i.test(storedPath);
+    // If an old Windows folder path remains in the row, use the confirmed Storage object path.
+    const cleanPath=storedPath.includes("\\")? "relation and functions.pdf" : storedPath;
+    // Build the public URL directly so spaces and special characters in filenames are encoded.
+    const encodedPath=cleanPath.split("/").map(part=>encodeURIComponent(part)).join("/");
+    const url=looksLikeUrl?storedPath:(cleanPath?`${SUPABASE_URL}/storage/v1/object/public/resources/${encodedPath}`:"#");
+    const card=document.createElement("article");
+    card.className="card";
+    const title=document.createElement("h3");
+    title.textContent=resource.title||resource.file_name||"Study resource";
+    const description=document.createElement("p");
+    description.textContent=resource.description||[resource.category,resource.subject,resource.topic].filter(Boolean).join(" • ")||"Study material";
+    const meta=document.createElement("p");
+    meta.style.fontSize="0.9rem";
+    meta.style.opacity="0.8";
+    meta.textContent=[resource.category,resource.subject,resource.difficulty&&resource.difficulty!=="All"?resource.difficulty:null].filter(Boolean).join(" • ");
+    const actions=document.createElement("div");
+    actions.style.display="flex";
+    actions.style.gap="10px";
+    actions.style.flexWrap="wrap";
+    const open=document.createElement("a");
+    open.className="btn secondary";
+    open.href=url;
+    open.target="_blank";
+    open.rel="noopener noreferrer";
+    open.textContent="Open PDF";
+    const download=document.createElement("a");
+    download.className="btn";
+    download.href=url;
+    download.target="_blank";
+    download.rel="noopener noreferrer";
+    download.download=resource.file_name||resource.title||"study-resource";
+    download.textContent="Download";
+    actions.append(open,download);
+    card.append(title,description);
+    if(meta.textContent)card.append(meta);
+    card.append(actions);
+    list.append(card);
+  }
+}
+
+/* ---------------- STARTUP ---------------- */
+async function init(){
+  questionsCompletedToday=0;
+  questionsInCurrentBatch=0;
+  currentBatch=1;
+  batchActive=true;
+  updatePracticeStats();
+  renderQuestion();
+
+  if(!configured()){
+    console.warn("Supabase is not configured. Add SUPABASE_URL and SUPABASE_KEY in the CONFIG section.");
+    return;
+  }
+
+  supabaseClient=window.supabase.createClient(SUPABASE_URL,SUPABASE_KEY);
+
+  const {data:{session}}=await supabaseClient.auth.getSession();
+  currentUser=session?.user||null;
+  updateAuthUI();
+
+  supabaseClient.auth.onAuthStateChange((_event,session)=>{
+    currentUser=session?.user||null;
+    updateAuthUI();
+  });
+}
+init();
+</script>
+</body>
+</html>
